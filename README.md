@@ -1,109 +1,193 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Expense Tracker
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
-
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+A modern expense tracking application built with Next.js and Supabase. Track your daily spending, categorize expenses, visualize spending trends, and manage your budget all in one place.
 
 ## Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Proxy
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+- **User Authentication**: Secure authentication with Supabase Auth using email and password
+- **Protected Routes**: All pages require login to access
+- **Expense Management**:
+  - Add expenses with categories, amounts, dates, and descriptions
+  - View all expenses with sorting and filtering
+  - Automatic categorization of spending
+- **Financial Insights**:
+  - Dashboard with KPI metrics (Total Spent, Budget Remaining, Daily Average, Top Category)
+  - Daily spending trend charts
+  - Category breakdown visualization
+  - Monthly budget tracking and spending analysis
+- **Modern UI**:
+  - Dark mode support with next-themes
+  - Material Symbols icons via Google Fonts
+  - Responsive design with Tailwind CSS
+  - Smooth animations and transitions
+- **Tech Stack**:
+  - [Next.js 15](https://nextjs.org) with App Router
+  - [Supabase](https://supabase.com) for backend and database
+  - [Tailwind CSS](https://tailwindcss.com) for styling
+  - [shadcn/ui](https://ui.shadcn.com/) components
+  - TypeScript for type safety
 
-## Demo
+## Getting Started
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+### Prerequisites
 
-## Deploy to Vercel
+- Node.js 18.18 or higher
+- A Supabase project (create one at [supabase.com](https://supabase.com))
 
-Vercel deployment will guide you through creating a Supabase account and project.
+### Setup
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
-
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
-
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
-
-## Clone and run locally
-
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
-
-2. Create a Next.js app using the Supabase Starter template npx command
-
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
-
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
-
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
-
-3. Use `cd` to change into the app's directory
+1. Clone the repository and navigate to the project directory:
 
    ```bash
    cd with-supabase-app
    ```
 
-4. Rename `.env.example` to `.env.local` and update the following:
+2. Install dependencies:
 
-  ```env
-  NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
-  ```
-  > [!NOTE]
-  > This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
-  > Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_ANON_KEY`; its value can be used in this example.
-  > See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
+   ```bash
+   npm install
+   ```
 
-  Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+3. Create a `.env.local` file and add your Supabase credentials:
 
-5. You can now run the Next.js local development server:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=[YOUR_SUPABASE_URL]
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[YOUR_SUPABASE_PUBLISHABLE_KEY]
+   ```
+
+   Find these values in your [Supabase project settings](https://supabase.com/dashboard/project/_?showConnect=true).
+
+4. Run the SQL migration in Supabase to set up the database schema:
+
+   - Go to your Supabase Dashboard
+   - Navigate to SQL Editor
+   - Copy and run the migration from `supabase/migrations/001_create_expenses.sql`
+
+5. Start the development server:
 
    ```bash
    npm run dev
    ```
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+   The app will be available at [http://localhost:3000](http://localhost:3000).
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+## Project Structure
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+```
+app/
+  protected/                    # Protected routes (require authentication)
+    layout.tsx                  # Shared layout with sidebar
+    page.tsx                    # Dashboard page
+    expenses/
+      page.tsx                  # Expense entry page
+    reports/
+      page.tsx                  # Financial insights & reports page
 
-## Feedback and issues
+components/
+  expense-tracker/              # Reusable expense tracker components
+    sidebar.tsx                 # Sidebar navigation
+    spending-chart.tsx          # Bar chart for daily spending
+    spending-history-chart.tsx  # Line chart for spending trends
+    donut-chart.tsx             # Category breakdown donut chart
+    stats-card.tsx              # KPI metric cards
+    expense-form.tsx            # Add expense form
+    transactions-table.tsx      # Transactions list
+    budget-progress.tsx         # Budget status bars
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+lib/
+  supabase/
+    server.ts                   # Supabase client for server components
+  actions/
+    expenses.ts                 # Server actions for expense CRUD
+  types/
+    database.ts                 # TypeScript types for database entities
+```
 
-## More Supabase examples
+## Usage
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+### Add an Expense
+
+1. Click the "Add Expense" button on the Dashboard or navigate to the Expenses page
+2. Enter the expense amount, select a category, and add optional notes
+3. Click "Save" to record the expense
+
+### View Financial Insights
+
+- **Dashboard**: Get an overview of your spending with KPIs and trend charts
+- **Reports**: See detailed financial insights with category breakdowns and budget analysis
+
+### Supported Categories
+
+- Food & Dining
+- Transportation
+- Entertainment
+- Shopping
+- Utilities
+- Health & Wellness
+- Rent/Housing
+- Other
+
+## Authentication
+
+This app uses Supabase Auth with Row Level Security (RLS) policies to ensure:
+
+- Users can only access their own expense data
+- Expenses are automatically associated with the logged-in user
+- All data is encrypted and secure
+
+## Database Schema
+
+### Expenses Table
+
+- `id`: UUID primary key
+- `user_id`: References authenticated user
+- `amount`: Decimal amount spent
+- `category`: Category of expense
+- `date`: Date of expense
+- `description`: Optional notes
+- `created_at`: Timestamp
+
+### Budgets Table
+
+- `id`: UUID primary key
+- `user_id`: References authenticated user
+- `category`: Budget category
+- `limit`: Monthly budget limit
+- `created_at`: Timestamp
+
+## Environment Variables
+
+```env
+NEXT_PUBLIC_SUPABASE_URL          # Your Supabase project URL
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY  # Your Supabase public key
+```
+
+## Development
+
+### Run Development Server
+
+```bash
+npm run dev
+```
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Start Production Server
+
+```bash
+npm start
+```
+
+## Learn More
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+## License
+
+This project is open source and available under the MIT License.

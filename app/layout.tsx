@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -9,12 +9,12 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "ExpenseTracker",
+  description: "Track your expenses and manage your budget",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   display: "swap",
   subsets: ["latin"],
 });
@@ -26,7 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={`${inter.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
