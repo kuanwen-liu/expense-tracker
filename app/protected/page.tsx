@@ -5,6 +5,7 @@ import { SpendingChart } from "@/components/expense-tracker/spending-chart";
 import { CategoryBreakdown } from "@/components/expense-tracker/category-breakdown";
 import { TransactionsTable } from "@/components/expense-tracker/transactions-table";
 import { getExpenses, getExpenseSummary, getDailySpending } from "@/lib/actions/expenses";
+import { getBudget } from "@/lib/actions/budgets";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
 export default async function DashboardPage() {
@@ -14,10 +15,11 @@ export default async function DashboardPage() {
   const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
 
   // Fetch data in parallel
-  const [summaryResult, expensesResult, dailyResult] = await Promise.all([
+  const [summaryResult, expensesResult, dailyResult, budgetResult] = await Promise.all([
     getExpenseSummary({ startDate, endDate }),
     getExpenses({ startDate, endDate, limit: 10 }),
     getDailySpending({ startDate, endDate }),
+    getBudget("total", "monthly"),
   ]);
 
   const summary = summaryResult.data;
@@ -55,8 +57,8 @@ export default async function DashboardPage() {
   // Format date range for display
   const dateRangeText = `${new Date(startDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} - ${new Date(endDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
 
-  // Monthly budget (hardcoded for now, could be from settings)
-  const monthlyBudget = 3500;
+  // Monthly budget (from user's budget settings, fallback to 3500)
+  const monthlyBudget = budgetResult.data?.amount || 3500;
   const budgetRemaining = monthlyBudget - (summary?.totalSpent || 0);
 
   return (

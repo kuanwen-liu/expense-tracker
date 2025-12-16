@@ -5,6 +5,7 @@ import { DonutChart } from "@/components/expense-tracker/donut-chart";
 import { BudgetProgress } from "@/components/expense-tracker/budget-progress";
 import { TransactionsTable } from "@/components/expense-tracker/transactions-table";
 import { getExpenses, getExpenseSummary, getDailySpending } from "@/lib/actions/expenses";
+import { getBudgetStatus } from "@/lib/actions/budgets";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
 export default async function ReportsPage() {
@@ -14,13 +15,15 @@ export default async function ReportsPage() {
   const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
 
   // Fetch data in parallel
-  const [summaryResult, expensesResult, dailyResult] = await Promise.all([
+  const [summaryResult, expensesResult, dailyResult, budgetStatusResult] = await Promise.all([
     getExpenseSummary({ startDate, endDate }),
     getExpenses({ startDate, endDate, limit: 10 }),
     getDailySpending({ startDate, endDate }),
+    getBudgetStatus({ startDate, endDate }),
   ]);
 
   const dailySpending = dailyResult.data || [];
+  const budgetStatus = budgetStatusResult.data;
 
   const summary = summaryResult.data;
   const expenses = expensesResult.data || [];
@@ -59,28 +62,32 @@ export default async function ReportsPage() {
     };
   });
 
-  // Monthly budget (hardcoded for now)
-  const monthlyBudget = 3500;
-  const budgetItems = [
-    {
-      name: "Monthly Limit",
-      current: summary?.totalSpent || 0,
-      limit: monthlyBudget,
-      color: "bg-primary",
-      isOverBudget: (summary?.totalSpent || 0) > monthlyBudget,
-    },
-  ];
+  // Budget items from real budget data
+  const budgetItems = budgetStatus?.budgets
+    .filter(b => b.category !== "total")
+    .slice(0, 5) // Show top 5 category budgets
+    .map(b => {
+      const config = CATEGORY_CONFIG[b.category as Category];
+      return {
+        name: config.label,
+        current: b.spent,
+        limit: b.amount,
+        color: b.isOverBudget ? "bg-red-500" : b.percentage >= 80 ? "bg-yellow-500" : "bg-green-500",
+        isOverBudget: b.isOverBudget,
+        percentage: b.percentage,
+      };
+    }) || [];
 
-  // Add top category as a budget item if exists
-  if (summary?.byCategory?.[0]) {
-    const topCategory = summary.byCategory[0];
-    const categoryBudget = monthlyBudget * 0.3; // Assume 30% budget for top category
-    budgetItems.push({
-      name: CATEGORY_CONFIG[topCategory.category].label,
-      current: topCategory.amount,
-      limit: categoryBudget,
-      color: "bg-orange-500",
-      isOverBudget: topCategory.amount > categoryBudget,
+  // Add total monthly budget at the beginning if exists
+  const totalBudget = budgetStatus?.budgets.find(b => b.category === "total");
+  if (totalBudget) {
+    budgetItems.unshift({
+      name: "Monthly Total",
+      current: totalBudget.spent,
+      limit: totalBudget.amount,
+      color: totalBudget.isOverBudget ? "bg-red-500" : totalBudget.percentage >= 80 ? "bg-yellow-500" : "bg-primary",
+      isOverBudget: totalBudget.isOverBudget,
+      percentage: totalBudget.percentage,
     });
   }
 

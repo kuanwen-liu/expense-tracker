@@ -3,6 +3,7 @@ import { Sidebar } from "@/components/expense-tracker/sidebar";
 import { MobileHeader } from "@/components/expense-tracker/mobile-header";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { createClient } from "@/lib/supabase/server";
+import { getUserPreferences } from "@/lib/actions/settings";
 
 export default async function ProtectedLayout({
   children,
@@ -12,10 +13,14 @@ export default async function ProtectedLayout({
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
+  // Get user preferences for display name
+  const preferencesResult = await getUserPreferences();
+  const displayName = preferencesResult.data?.display_name || null;
+
   return (
     <div className="relative flex h-screen w-full overflow-hidden">
       {/* Sidebar Navigation */}
-      <Sidebar user={user} />
+      <Sidebar user={user} displayName={displayName} />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-y-auto">

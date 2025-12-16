@@ -23,9 +23,10 @@ interface SidebarProps {
       avatar_url?: string;
     };
   } | null;
+  displayName?: string | null;
 }
 
-export function Sidebar({ user }: SidebarProps) {
+export function Sidebar({ user, displayName: preferencesDisplayName }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -35,7 +36,8 @@ export function Sidebar({ user }: SidebarProps) {
     router.push("/auth/login");
   };
 
-  const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+  // Priority: preferences display name → user metadata full name → email username → "User"
+  const displayName = preferencesDisplayName || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
   const email = user?.email || "";
 
   return (
