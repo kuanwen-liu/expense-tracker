@@ -43,6 +43,42 @@ export interface Budget {
   updated_at: string;
 }
 
+export interface BudgetInsert {
+  category: Category | "total";
+  amount: number;
+  period: "daily" | "monthly" | "yearly";
+}
+
+export interface BudgetUpdate {
+  amount?: number;
+  period?: "daily" | "monthly" | "yearly";
+}
+
+export interface UserPreferences {
+  id: string;
+  user_id: string;
+  display_name: string | null;
+  default_daily_budget: number | null;
+  default_monthly_budget: number | null;
+  currency: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserPreferencesInsert {
+  display_name?: string | null;
+  default_daily_budget?: number | null;
+  default_monthly_budget?: number | null;
+  currency?: string;
+}
+
+export interface UserPreferencesUpdate {
+  display_name?: string | null;
+  default_daily_budget?: number | null;
+  default_monthly_budget?: number | null;
+  currency?: string;
+}
+
 export interface ExpenseSummary {
   totalSpent: number;
   budgetRemaining: number;
