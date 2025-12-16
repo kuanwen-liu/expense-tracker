@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +20,7 @@ interface UpdateProfileFormProps {
 }
 
 export function UpdateProfileForm({ user, preferences }: UpdateProfileFormProps) {
+  const router = useRouter();
   const [displayName, setDisplayName] = useState(preferences?.display_name || user?.user_metadata?.full_name || "");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,6 +42,7 @@ export function UpdateProfileForm({ user, preferences }: UpdateProfileFormProps)
       setError(result.error);
     } else {
       setSuccess(true);
+      router.refresh(); // Refresh to show updated name in sidebar
       setTimeout(() => setSuccess(false), 3000);
     }
   };

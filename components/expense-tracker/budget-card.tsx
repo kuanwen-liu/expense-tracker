@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { MaterialIcon } from "./material-icon";
 import { upsertBudget } from "@/lib/actions/budgets";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
@@ -20,6 +21,7 @@ export function BudgetCard({
   period,
   onSave,
 }: BudgetCardProps) {
+  const router = useRouter();
   const [amount, setAmount] = useState(currentAmount.toString());
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +64,7 @@ export function BudgetCard({
       setError(result.error);
     } else {
       setIsEditing(false);
+      router.refresh(); // Refresh the page to show updated data
       if (onSave) onSave();
     }
   };
