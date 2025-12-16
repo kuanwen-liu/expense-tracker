@@ -136,9 +136,11 @@ export function BudgetPreferencesForm({ preferences }: BudgetPreferencesFormProp
             )}
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Preferences"}
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit" className="min-w-[160px]" disabled={isLoading}>
+                {isLoading ? "Saving..." : "Save Preferences"}
+              </Button>
+            </div>
           </div>
         </form>
       </CardContent>

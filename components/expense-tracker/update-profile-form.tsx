@@ -76,13 +76,21 @@ export function UpdateProfileForm({ user, preferences }: UpdateProfileFormProps)
             {/* Email (Read-only) */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={user?.email || ""}
-                disabled
-                className="bg-muted"
-              />
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  value={user?.email || ""}
+                  disabled
+                  className="bg-muted pr-10"
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
+              </div>
               <p className="text-xs text-muted-foreground">
                 Email cannot be changed from here. Contact support to change your email.
               </p>
@@ -103,9 +111,11 @@ export function UpdateProfileForm({ user, preferences }: UpdateProfileFormProps)
             )}
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Changes"}
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit" className="min-w-[140px]" disabled={isLoading}>
+                {isLoading ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
           </div>
         </form>
       </CardContent>

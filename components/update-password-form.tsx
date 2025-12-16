@@ -65,10 +65,16 @@ export function UpdatePasswordForm({
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save new password"}
-              </Button>
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+                  <p className="text-sm text-red-500">{error}</p>
+                </div>
+              )}
+              <div className="flex justify-end">
+                <Button type="submit" className="min-w-[160px]" disabled={isLoading}>
+                  {isLoading ? "Saving..." : "Save new password"}
+                </Button>
+              </div>
             </div>
           </form>
         </CardContent>
