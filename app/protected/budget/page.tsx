@@ -4,6 +4,7 @@ import { BudgetProgress } from "@/components/expense-tracker/budget-progress";
 import { BudgetAlert } from "@/components/expense-tracker/budget-alert";
 import { getBudgets, getBudgetStatus } from "@/lib/actions/budgets";
 import { getExpenseSummary } from "@/lib/actions/expenses";
+import { getUserPreferences } from "@/lib/actions/settings";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
 const CATEGORIES: Category[] = ["food", "transport", "utilities", "entertainment", "shopping", "health", "rent", "other"];
@@ -15,15 +16,17 @@ export default async function BudgetPage() {
   const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
 
   // Fetch data in parallel
-  const [budgetsResult, statusResult, summaryResult] = await Promise.all([
+  const [budgetsResult, statusResult, summaryResult, preferencesResult] = await Promise.all([
     getBudgets({ period: "monthly" }),
     getBudgetStatus({ startDate, endDate }),
     getExpenseSummary({ startDate, endDate }),
+    getUserPreferences(),
   ]);
 
   const budgets = budgetsResult.data || [];
   const budgetStatus = statusResult.data;
   const summary = summaryResult.data;
+  const preferences = preferencesResult.data;
 
   // Create a map of category budgets for easy lookup
   const budgetMap = new Map(budgets.map(b => [b.category, b]));
@@ -113,7 +116,7 @@ export default async function BudgetPage() {
         </div>
         <BudgetCard
           category="total"
-          currentAmount={totalBudget?.amount || 0}
+          currentAmount={totalBudget?.amount || preferences?.default_monthly_budget || 0}
           spent={totalSpent}
           period="monthly"
         />

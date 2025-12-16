@@ -6,6 +6,7 @@ import { CategoryBreakdown } from "@/components/expense-tracker/category-breakdo
 import { TransactionsTable } from "@/components/expense-tracker/transactions-table";
 import { getExpenses, getExpenseSummary, getDailySpending } from "@/lib/actions/expenses";
 import { getBudget } from "@/lib/actions/budgets";
+import { getUserPreferences } from "@/lib/actions/settings";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
 export default async function DashboardPage() {
@@ -15,16 +16,18 @@ export default async function DashboardPage() {
   const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
 
   // Fetch data in parallel
-  const [summaryResult, expensesResult, dailyResult, budgetResult] = await Promise.all([
+  const [summaryResult, expensesResult, dailyResult, budgetResult, preferencesResult] = await Promise.all([
     getExpenseSummary({ startDate, endDate }),
     getExpenses({ startDate, endDate, limit: 10 }),
     getDailySpending({ startDate, endDate }),
     getBudget("total", "monthly"),
+    getUserPreferences(),
   ]);
 
   const summary = summaryResult.data;
   const expenses = expensesResult.data || [];
   const dailySpending = dailyResult.data || [];
+  const preferences = preferencesResult.data;
 
   // Format transactions for table
   const transactions = expenses.map((e) => {
@@ -57,8 +60,8 @@ export default async function DashboardPage() {
   // Format date range for display
   const dateRangeText = `${new Date(startDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} - ${new Date(endDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
 
-  // Monthly budget (from user's budget settings, fallback to 3500)
-  const monthlyBudget = budgetResult.data?.amount || 3500;
+  // Monthly budget (priority: budget settings → user preferences → hardcoded default)
+  const monthlyBudget = budgetResult.data?.amount || preferences?.default_monthly_budget || 3500;
   const budgetRemaining = monthlyBudget - (summary?.totalSpent || 0);
 
   return (

@@ -4,21 +4,24 @@ import { RecentActivity } from "@/components/expense-tracker/recent-activity";
 import { CalendarWidget } from "@/components/expense-tracker/calendar-widget";
 import { getTodayExpenses, getExpenses } from "@/lib/actions/expenses";
 import { getBudget } from "@/lib/actions/budgets";
+import { getUserPreferences } from "@/lib/actions/settings";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
 export default async function ExpensesPage() {
   // Fetch today's expenses and recent activity
-  const [todayResult, recentResult, budgetResult] = await Promise.all([
+  const [todayResult, recentResult, budgetResult, preferencesResult] = await Promise.all([
     getTodayExpenses(),
     getExpenses({ limit: 5 }),
     getBudget("total", "daily"),
+    getUserPreferences(),
   ]);
 
   const todayData = todayResult.data;
   const recentExpenses = recentResult.data || [];
+  const preferences = preferencesResult.data;
 
-  // Daily budget (from user's budget settings, fallback to 150)
-  const dailyBudget = budgetResult.data?.amount || 150;
+  // Daily budget (priority: budget settings → user preferences → hardcoded default)
+  const dailyBudget = budgetResult.data?.amount || preferences?.default_daily_budget || 150;
   const todaySpent = todayData?.totalSpent || 0;
   const percentage = Math.min(Math.round((todaySpent / dailyBudget) * 100), 100);
 
