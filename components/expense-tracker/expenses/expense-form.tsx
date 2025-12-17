@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MaterialIcon } from "./material-icon";
+import { MaterialIcon } from "../shared/material-icon";
 import { createExpense } from "@/lib/actions/expenses";
 import type { Category } from "@/lib/types/database";
 

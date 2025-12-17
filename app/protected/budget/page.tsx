@@ -1,7 +1,7 @@
-import { MaterialIcon } from "@/components/expense-tracker/material-icon";
-import { BudgetCard } from "@/components/expense-tracker/budget-card";
-import { BudgetProgress } from "@/components/expense-tracker/budget-progress";
-import { BudgetAlert } from "@/components/expense-tracker/budget-alert";
+import { MaterialIcon } from "@/components/expense-tracker/shared/material-icon";
+import { BudgetCard } from "@/components/expense-tracker/budget/budget-card";
+import { BudgetProgress } from "@/components/expense-tracker/dashboard/budget-progress";
+import { BudgetAlert } from "@/components/expense-tracker/budget/budget-alert";
 import { getBudgets, getBudgetStatus } from "@/lib/actions/budgets";
 import { getExpenseSummary } from "@/lib/actions/expenses";
 import { getUserPreferences } from "@/lib/actions/settings";

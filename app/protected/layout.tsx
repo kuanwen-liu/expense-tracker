@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { Sidebar } from "@/components/expense-tracker/sidebar";
-import { MobileHeader } from "@/components/expense-tracker/mobile-header";
+import { Sidebar } from "@/components/expense-tracker/shared/sidebar";
+import { MobileHeader } from "@/components/expense-tracker/shared/mobile-header";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { createClient } from "@/lib/supabase/server";
 import { getUserPreferences } from "@/lib/actions/settings";

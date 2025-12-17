@@ -1,6 +1,6 @@
 "use client";
 
-import { MaterialIcon } from "./material-icon";
+import { MaterialIcon } from "../shared/material-icon";
 
 const days = ["S", "M", "T", "W", "T", "F", "S"];
 

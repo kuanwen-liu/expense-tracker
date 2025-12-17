@@ -1,6 +1,6 @@
 "use client";
 
-import { MaterialIcon } from "./material-icon";
+import { MaterialIcon } from "../shared/material-icon";
 
 interface SpendingChartProps {
   data?: { date: string; amount: number }[];

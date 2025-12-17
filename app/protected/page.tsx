@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { MaterialIcon } from "@/components/expense-tracker/material-icon";
-import { StatsCard } from "@/components/expense-tracker/stats-card";
-import { SpendingChart } from "@/components/expense-tracker/spending-chart";
-import { CategoryBreakdown } from "@/components/expense-tracker/category-breakdown";
-import { TransactionsTable } from "@/components/expense-tracker/transactions-table";
+import { MaterialIcon } from "@/components/expense-tracker/shared/material-icon";
+import { StatsCard } from "@/components/expense-tracker/shared/stats-card";
+import { SpendingChart } from "@/components/expense-tracker/dashboard/spending-chart";
+import { CategoryBreakdown } from "@/components/expense-tracker/dashboard/category-breakdown";
+import { TransactionsTable } from "@/components/expense-tracker/dashboard/transactions-table";
 import { getExpenses, getExpenseSummary, getDailySpending } from "@/lib/actions/expenses";
 import { getBudget } from "@/lib/actions/budgets";
 import { getUserPreferences } from "@/lib/actions/settings";

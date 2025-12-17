@@ -1,9 +1,9 @@
-import { MaterialIcon } from "@/components/expense-tracker/material-icon";
-import { StatsCard } from "@/components/expense-tracker/stats-card";
-import { SpendingHistoryChart } from "@/components/expense-tracker/spending-history-chart";
-import { DonutChart } from "@/components/expense-tracker/donut-chart";
-import { BudgetProgress } from "@/components/expense-tracker/budget-progress";
-import { TransactionsTable } from "@/components/expense-tracker/transactions-table";
+import { MaterialIcon } from "@/components/expense-tracker/shared/material-icon";
+import { StatsCard } from "@/components/expense-tracker/shared/stats-card";
+import { SpendingHistoryChart } from "@/components/expense-tracker/reports/spending-history-chart";
+import { DonutChart } from "@/components/expense-tracker/reports/donut-chart";
+import { BudgetProgress } from "@/components/expense-tracker/dashboard/budget-progress";
+import { TransactionsTable } from "@/components/expense-tracker/dashboard/transactions-table";
 import { getExpenses, getExpenseSummary, getDailySpending } from "@/lib/actions/expenses";
 import { getBudgetStatus } from "@/lib/actions/budgets";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";

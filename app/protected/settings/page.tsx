@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { UpdateProfileForm } from "@/components/expense-tracker/update-profile-form";
-import { BudgetPreferencesForm } from "@/components/expense-tracker/budget-preferences-form";
+import { UpdateProfileForm } from "@/components/expense-tracker/settings/update-profile-form";
+import { BudgetPreferencesForm } from "@/components/expense-tracker/settings/budget-preferences-form";
 import { UpdatePasswordForm } from "@/components/update-password-form";
 import { getUserPreferences } from "@/lib/actions/settings";
 

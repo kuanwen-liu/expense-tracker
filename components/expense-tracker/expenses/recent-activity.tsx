@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MaterialIcon } from "./material-icon";
+import { MaterialIcon } from "../shared/material-icon";
 
 interface ActivityItem {
   id: string;

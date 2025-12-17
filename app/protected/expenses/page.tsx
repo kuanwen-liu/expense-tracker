@@ -1,7 +1,7 @@
-import { ExpenseForm } from "@/components/expense-tracker/expense-form";
-import { DailySummary } from "@/components/expense-tracker/daily-summary";
-import { RecentActivity } from "@/components/expense-tracker/recent-activity";
-import { CalendarWidget } from "@/components/expense-tracker/calendar-widget";
+import { ExpenseForm } from "@/components/expense-tracker/expenses/expense-form";
+import { DailySummary } from "@/components/expense-tracker/expenses/daily-summary";
+import { RecentActivity } from "@/components/expense-tracker/expenses/recent-activity";
+import { CalendarWidget } from "@/components/expense-tracker/expenses/calendar-widget";
 import { getTodayExpenses, getExpenses } from "@/lib/actions/expenses";
 import { getBudget } from "@/lib/actions/budgets";
 import { getUserPreferences } from "@/lib/actions/settings";

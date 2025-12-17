@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MaterialIcon } from "./material-icon";
+import { MaterialIcon } from "../shared/material-icon";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
 interface BudgetAlert {
