@@ -8,17 +8,24 @@ import { getUserPreferences } from "@/lib/actions/settings";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
 export default async function ExpensesPage() {
-  // Fetch today's expenses and recent activity
-  const [todayResult, recentResult, budgetResult, preferencesResult] = await Promise.all([
+  // Calculate date range for calendar (6 months back and forward)
+  const now = new Date();
+  const startDate = new Date(now.getFullYear(), now.getMonth() - 6, 1).toISOString().split("T")[0];
+  const endDate = new Date(now.getFullYear(), now.getMonth() + 7, 0).toISOString().split("T")[0];
+
+  // Fetch today's expenses, recent activity, and all expenses for calendar
+  const [todayResult, recentResult, budgetResult, preferencesResult, allExpensesResult] = await Promise.all([
     getTodayExpenses(),
     getExpenses({ limit: 5 }),
     getBudget("total", "daily"),
     getUserPreferences(),
+    getExpenses({ startDate, endDate }),
   ]);
 
   const todayData = todayResult.data;
   const recentExpenses = recentResult.data || [];
   const preferences = preferencesResult.data;
+  const allExpenses = allExpensesResult.data || [];
 
   // Daily budget (priority: budget settings → user preferences → hardcoded default)
   const dailyBudget = budgetResult.data?.amount || preferences?.default_daily_budget || 150;
@@ -46,6 +53,9 @@ export default async function ExpensesPage() {
     };
   });
 
+  // Extract unique expense dates for calendar
+  const expenseDates = [...new Set(allExpenses.map((e) => e.date))];
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
       {/* Left Column: Entry Form */}
@@ -72,7 +82,7 @@ export default async function ExpensesPage() {
           percentage={percentage}
         />
         <RecentActivity items={activityItems.length > 0 ? activityItems : undefined} />
-        <CalendarWidget />
+        <CalendarWidget expenseDates={expenseDates} />
       </div>
     </div>
   );
