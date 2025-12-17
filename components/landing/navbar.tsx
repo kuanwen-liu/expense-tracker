@@ -25,10 +25,10 @@ export function Navbar({ isAuthenticated = false }: NavbarProps) {
               Features
             </Link>
             <Link
-              href="#screenshots"
+              href="#preview"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              Screenshots
+              Preview
             </Link>
           </div>
 

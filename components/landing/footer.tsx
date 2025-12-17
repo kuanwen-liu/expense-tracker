@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-export function Footer() {
+interface FooterProps {
+  isAuthenticated?: boolean;
+}
+
+export function Footer({ isAuthenticated = false }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -33,23 +37,34 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#screenshots" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                <Link href="#preview" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  Screenshots
+                  Preview
                 </Link>
               </li>
-              <li>
-                <Link href="/auth/sign-up" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  Get Started
-                </Link>
-              </li>
-              <li>
-                <Link href="/auth/login" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  Sign In
-                </Link>
-              </li>
+              {isAuthenticated ? (
+                <li>
+                  <Link href="/protected" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    Dashboard
+                  </Link>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <Link href="/auth/sign-up" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      Get Started
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/auth/login" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      Sign In
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
 

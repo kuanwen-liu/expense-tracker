@@ -32,11 +32,11 @@ export default async function Home() {
         <div id="features">
           <FeaturesSection />
         </div>
-        <div id="screenshots">
+        <div id="preview">
           <ScreenshotsSection />
         </div>
       </main>
-      <Footer />
+      <Footer isAuthenticated={isAuthenticated} />
     </div>
   );
 }
