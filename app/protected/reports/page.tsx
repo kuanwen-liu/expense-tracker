@@ -4,15 +4,57 @@ import { SpendingHistoryChart } from "@/components/expense-tracker/reports/spend
 import { DonutChart } from "@/components/expense-tracker/reports/donut-chart";
 import { BudgetProgress } from "@/components/expense-tracker/dashboard/budget-progress";
 import { TransactionsTable } from "@/components/expense-tracker/dashboard/transactions-table";
+import { ReportFilters } from "@/components/expense-tracker/reports/report-filters";
+import { DownloadReportButton } from "@/components/expense-tracker/reports/download-report-button";
 import { getExpenses, getExpenseSummary, getDailySpending } from "@/lib/actions/expenses";
 import { getBudgetStatus } from "@/lib/actions/budgets";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
-export default async function ReportsPage() {
-  // Get current month date range
+function getDateRange(period: string) {
   const now = new Date();
-  const startDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0];
-  const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
+  let startDate: string;
+  let endDate: string;
+
+  switch (period) {
+    case "last-month":
+      startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().split("T")[0];
+      endDate = new Date(now.getFullYear(), now.getMonth(), 0).toISOString().split("T")[0];
+      break;
+    case "last-3-months":
+      startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1).toISOString().split("T")[0];
+      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
+      break;
+    case "last-6-months":
+      startDate = new Date(now.getFullYear(), now.getMonth() - 6, 1).toISOString().split("T")[0];
+      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
+      break;
+    case "this-year":
+      startDate = new Date(now.getFullYear(), 0, 1).toISOString().split("T")[0];
+      endDate = new Date(now.getFullYear(), 11, 31).toISOString().split("T")[0];
+      break;
+    case "last-year":
+      startDate = new Date(now.getFullYear() - 1, 0, 1).toISOString().split("T")[0];
+      endDate = new Date(now.getFullYear() - 1, 11, 31).toISOString().split("T")[0];
+      break;
+    case "this-month":
+    default:
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0];
+      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
+      break;
+  }
+
+  return { startDate, endDate };
+}
+
+export default async function ReportsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ period?: string }>;
+}) {
+  // Get date range based on selected period
+  const params = await searchParams;
+  const period = params.period || "this-month";
+  const { startDate, endDate } = getDateRange(period);
 
   // Fetch data in parallel
   const [summaryResult, expensesResult, dailyResult, budgetStatusResult] = await Promise.all([
@@ -91,34 +133,36 @@ export default async function ReportsPage() {
     });
   }
 
+  // Prepare data for download report
+  const periodLabels: Record<string, string> = {
+    "this-month": "This Month",
+    "last-month": "Last Month",
+    "last-3-months": "Last 3 Months",
+    "last-6-months": "Last 6 Months",
+    "this-year": "This Year",
+    "last-year": "Last Year",
+  };
+
+  const reportData = {
+    summary: {
+      totalSpent: summary?.totalSpent || 0,
+      dailyAverage: summary?.dailyAverage || 0,
+      transactionCount: summary?.transactionCount || 0,
+    },
+    transactions: transactions,
+    period: periodLabels[period] || "This Month",
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h2 className="text-3xl font-black tracking-tight">Financial Insights</h2>
-        <button className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-sm">
-          <MaterialIcon icon="download" className="text-[20px]" />
-          <span>Download Report</span>
-        </button>
+        <DownloadReportButton data={reportData} />
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <button className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border hover:border-primary/50 text-sm font-medium transition-colors shadow-sm">
-          <span>This Month</span>
-          <MaterialIcon icon="keyboard_arrow_down" className="text-[18px]" />
-        </button>
-        <button className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border hover:border-primary/50 text-sm font-medium transition-colors shadow-sm opacity-60 hover:opacity-100">
-          <span>This Year</span>
-          <MaterialIcon icon="keyboard_arrow_down" className="text-[18px]" />
-        </button>
-        <div className="h-6 w-px bg-border mx-1 hidden sm:block"></div>
-        <button className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border hover:border-primary/50 text-sm font-medium transition-colors shadow-sm">
-          <MaterialIcon icon="attach_money" className="text-[18px] text-muted-foreground" />
-          <span>USD</span>
-          <MaterialIcon icon="keyboard_arrow_down" className="text-[18px]" />
-        </button>
-      </div>
+      <ReportFilters />
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

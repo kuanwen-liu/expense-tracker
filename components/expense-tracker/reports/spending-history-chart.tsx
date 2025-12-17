@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { MaterialIcon } from "../shared/material-icon";
 
 interface SpendingHistoryChartProps {
@@ -7,6 +8,7 @@ interface SpendingHistoryChartProps {
 }
 
 export function SpendingHistoryChart({ data = [] }: SpendingHistoryChartProps) {
+  const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; amount: number; date: string } | null>(null);
   // If no data, show empty state
   if (data.length === 0) {
     return (
@@ -48,9 +50,6 @@ export function SpendingHistoryChart({ data = [] }: SpendingHistoryChartProps) {
   // Generate SVG path for area (filled)
   const areaPath = `${linePath} L${points[points.length - 1]?.x || 0},${height} L${padding},${height} Z`;
 
-  // Find the highest point for tooltip
-  const highestPoint = points.reduce((max, p) => (p.amount > max.amount ? p : max), points[0]);
-
   // Generate x-axis labels (show ~7 labels)
   const labelIndices: number[] = [];
   const step = Math.max(1, Math.floor(data.length / 6));
@@ -73,7 +72,7 @@ export function SpendingHistoryChart({ data = [] }: SpendingHistoryChartProps) {
         </button>
       </div>
 
-      <div className="flex-1 w-full min-h-[250px] relative">
+      <div className="flex-1 w-full min-h-[250px] relative" onMouseLeave={() => setHoveredPoint(null)}>
         {/* SVG Line Chart */}
         <svg className="w-full h-full" viewBox={`0 0 ${width} ${height + 20}`} preserveAspectRatio="none">
           <defs>
@@ -101,43 +100,46 @@ export function SpendingHistoryChart({ data = [] }: SpendingHistoryChartProps) {
             strokeLinejoin="round"
           />
 
-          {/* Data points */}
+          {/* Data points with hover */}
           {points.map((p, i) => (
-            <circle
-              key={i}
-              cx={p.x}
-              cy={p.y}
-              r="4"
-              fill="hsl(var(--primary))"
-              stroke="hsl(var(--card))"
-              strokeWidth="2"
-            />
+            <g key={i}>
+              {/* Invisible larger circle for easier hovering */}
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r="12"
+                fill="transparent"
+                style={{ cursor: "pointer" }}
+                onMouseEnter={() => setHoveredPoint(p)}
+              />
+              {/* Visible circle */}
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r={hoveredPoint === p ? "6" : "4"}
+                fill="hsl(var(--primary))"
+                stroke="hsl(var(--card))"
+                strokeWidth="2"
+                style={{ cursor: "pointer", pointerEvents: "none" }}
+              />
+            </g>
           ))}
-
-          {/* Highlight highest point */}
-          {highestPoint && (
-            <circle
-              cx={highestPoint.x}
-              cy={highestPoint.y}
-              r="6"
-              fill="hsl(var(--primary))"
-              stroke="hsl(var(--card))"
-              strokeWidth="2"
-            />
-          )}
         </svg>
 
-        {/* Tooltip for highest point */}
-        {highestPoint && (
+        {/* Tooltip on hover */}
+        {hoveredPoint && (
           <div
-            className="absolute bg-foreground text-background text-xs py-1 px-2 rounded pointer-events-none shadow-lg"
+            className="absolute bg-foreground text-background text-xs py-1.5 px-3 rounded pointer-events-none shadow-lg font-medium"
             style={{
-              left: `${(highestPoint.x / width) * 100}%`,
-              top: `${(highestPoint.y / (height + 20)) * 100 - 10}%`,
+              left: `${(hoveredPoint.x / width) * 100}%`,
+              top: `${(hoveredPoint.y / (height + 20)) * 100 - 10}%`,
               transform: "translate(-50%, -100%)",
             }}
           >
-            ${highestPoint.amount.toFixed(2)}
+            <div>${hoveredPoint.amount.toFixed(2)}</div>
+            <div className="text-[10px] opacity-75 mt-0.5">
+              {new Date(hoveredPoint.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+            </div>
           </div>
         )}
       </div>
