@@ -10,12 +10,23 @@ A modern expense tracking application built with Next.js and Supabase. Track you
   - Add expenses with categories, amounts, dates, and descriptions
   - View all expenses with sorting and filtering
   - Automatic categorization of spending
+  - Calendar widget for date selection
 - **Financial Insights**:
   - Dashboard with KPI metrics (Total Spent, Budget Remaining, Daily Average, Top Category)
   - Daily spending trend charts
   - Category breakdown visualization
   - Monthly budget tracking and spending analysis
+  - Detailed reports with filtering and export functionality
+- **Budget Management**:
+  - Set category-specific budget limits
+  - Real-time budget alerts and notifications
+  - Track budget performance by category
+- **Settings & Customization**:
+  - Currency preferences (multiple currency support)
+  - Budget preferences and limits
+  - User profile management
 - **Modern UI**:
+  - Landing page with hero section and feature showcase
   - Dark mode support with next-themes
   - Material Symbols icons via Google Fonts
   - Responsive design with Tailwind CSS
@@ -39,7 +50,7 @@ A modern expense tracking application built with Next.js and Supabase. Track you
 1. Clone the repository and navigate to the project directory:
 
    ```bash
-   cd with-supabase-app
+   cd expense-tracker
    ```
 
 2. Install dependencies:
@@ -75,6 +86,15 @@ A modern expense tracking application built with Next.js and Supabase. Track you
 
 ```
 app/
+  page.tsx                      # Landing page
+  privacy/
+    page.tsx                    # Privacy policy
+  terms/
+    page.tsx                    # Terms of service
+  auth/                         # Authentication pages
+    login/
+    sign-up/
+    forgot-password/
   protected/                    # Protected routes (require authentication)
     layout.tsx                  # Shared layout with sidebar
     page.tsx                    # Dashboard page
@@ -82,21 +102,51 @@ app/
       page.tsx                  # Expense entry page
     reports/
       page.tsx                  # Financial insights & reports page
+    budget/
+      page.tsx                  # Budget management page
+    settings/
+      page.tsx                  # User settings page
 
 components/
-  expense-tracker/              # Reusable expense tracker components
-    sidebar.tsx                 # Sidebar navigation
-    spending-chart.tsx          # Bar chart for daily spending
-    spending-history-chart.tsx  # Line chart for spending trends
-    donut-chart.tsx             # Category breakdown donut chart
-    stats-card.tsx              # KPI metric cards
-    expense-form.tsx            # Add expense form
-    transactions-table.tsx      # Transactions list
-    budget-progress.tsx         # Budget status bars
+  landing/                      # Landing page components
+    navbar.tsx
+    hero-section.tsx
+    features-section.tsx
+    screenshots-section.tsx
+    footer.tsx
+  expense-tracker/
+    shared/                     # Shared components
+      sidebar.tsx
+      mobile-header.tsx
+      stats-card.tsx
+      material-icon.tsx
+    dashboard/                  # Dashboard components
+      spending-chart.tsx
+      category-breakdown.tsx
+      transactions-table.tsx
+      budget-progress.tsx
+    expenses/                   # Expense page components
+      expense-form.tsx
+      daily-summary.tsx
+      recent-activity.tsx
+      calendar-widget.tsx
+    reports/                    # Reports page components
+      spending-history-chart.tsx
+      donut-chart.tsx
+      report-filters.tsx
+      download-report-button.tsx
+    budget/                     # Budget page components
+      budget-card.tsx
+      budget-alert.tsx
+    settings/                   # Settings page components
+      currency-preferences-form.tsx
+      budget-preferences-form.tsx
+      update-profile-form.tsx
 
 lib/
   supabase/
     server.ts                   # Supabase client for server components
+    client.ts                   # Supabase client for client components
   actions/
     expenses.ts                 # Server actions for expense CRUD
   types/
