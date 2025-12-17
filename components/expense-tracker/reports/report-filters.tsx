@@ -13,7 +13,11 @@ const TIME_PERIODS = [
   { value: "last-year", label: "Last Year" },
 ];
 
-export function ReportFilters() {
+interface ReportFiltersProps {
+  currency?: string;
+}
+
+export function ReportFilters({ currency = "USD" }: ReportFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -78,10 +82,10 @@ export function ReportFilters() {
 
       <div className="h-6 w-px bg-border mx-1 hidden sm:block"></div>
 
-      {/* Currency Display (Static for now) */}
+      {/* Currency Display */}
       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border text-sm font-medium opacity-60">
         <MaterialIcon icon="attach_money" className="text-[18px] text-muted-foreground" />
-        <span>USD</span>
+        <span>{currency}</span>
       </div>
     </div>
   );

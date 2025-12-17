@@ -8,6 +8,7 @@ import { ReportFilters } from "@/components/expense-tracker/reports/report-filte
 import { DownloadReportButton } from "@/components/expense-tracker/reports/download-report-button";
 import { getExpenses, getExpenseSummary, getDailySpending } from "@/lib/actions/expenses";
 import { getBudgetStatus } from "@/lib/actions/budgets";
+import { getUserPreferences } from "@/lib/actions/settings";
 import { CATEGORY_CONFIG, type Category } from "@/lib/types/database";
 
 function getDateRange(period: string) {
@@ -57,18 +58,21 @@ export default async function ReportsPage({
   const { startDate, endDate } = getDateRange(period);
 
   // Fetch data in parallel
-  const [summaryResult, expensesResult, dailyResult, budgetStatusResult] = await Promise.all([
+  const [summaryResult, expensesResult, dailyResult, budgetStatusResult, preferencesResult] = await Promise.all([
     getExpenseSummary({ startDate, endDate }),
     getExpenses({ startDate, endDate, limit: 10 }),
     getDailySpending({ startDate, endDate }),
     getBudgetStatus({ startDate, endDate }),
+    getUserPreferences(),
   ]);
 
   const dailySpending = dailyResult.data || [];
   const budgetStatus = budgetStatusResult.data;
+  const preferences = preferencesResult.data;
 
   const summary = summaryResult.data;
   const expenses = expensesResult.data || [];
+  const currency = preferences?.currency || "USD";
 
   // Format transactions for table
   const transactions = expenses.map((e) => {
@@ -162,7 +166,7 @@ export default async function ReportsPage({
       </div>
 
       {/* Filters */}
-      <ReportFilters />
+      <ReportFilters currency={currency} />
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

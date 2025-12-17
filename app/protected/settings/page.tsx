@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { UpdateProfileForm } from "@/components/expense-tracker/settings/update-profile-form";
 import { BudgetPreferencesForm } from "@/components/expense-tracker/settings/budget-preferences-form";
+import { CurrencyPreferencesForm } from "@/components/expense-tracker/settings/currency-preferences-form";
 import { UpdatePasswordForm } from "@/components/update-password-form";
 import { getUserPreferences } from "@/lib/actions/settings";
 
@@ -46,7 +47,10 @@ export default async function SettingsPage() {
           <div className="h-8 w-1 bg-primary rounded-full" />
           <h3 className="text-lg font-semibold">Preferences</h3>
         </div>
-        <BudgetPreferencesForm preferences={preferences} />
+        <div className="space-y-4">
+          <BudgetPreferencesForm preferences={preferences} />
+          <CurrencyPreferencesForm preferences={preferences} />
+        </div>
       </div>
     </div>
   );
